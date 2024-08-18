@@ -37,6 +37,8 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.3.2'
+
+    implementation group: 'com.github.albfernandez', name: 'javadbf', version: '1.14.1'
 }
 
 tasks.named('test') {

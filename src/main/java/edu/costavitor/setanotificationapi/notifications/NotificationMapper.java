@@ -79,6 +79,6 @@ public interface NotificationMapper {
     @Mapping(target = "observacao", source = "dsObservacao")
     @Mapping(target = "latitude", source = "latitude")
     @Mapping(target = "longitude", source = "longitude")
-    Notification mapToNotification(NotificationProjection source);
+    Notification mapToNotification(NotificationEntity source);
 
 }

@@ -1,10 +1,12 @@
 package edu.costavitor.setanotificationapi.notifications;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface NotificationRepository extends Repository<NotificationEntity, String> {
+@Repository
+public interface NotificationRepository extends CrudRepository<NotificationEntity, String> {
 
-    List<NotificationProjection> findAllProjectedBy();
+    List<NotificationEntity> findAll();
 }

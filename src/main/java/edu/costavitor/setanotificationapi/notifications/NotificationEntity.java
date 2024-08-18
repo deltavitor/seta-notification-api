@@ -1,17 +1,19 @@
 package edu.costavitor.setanotificationapi.notifications;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
-import java.sql.Date;
+import java.util.Date;
 
-@Entity
-@Table(name = "notification")
+@RedisHash
 @Getter
 @Setter
+@Builder
+@FieldNameConstants
 public class NotificationEntity {
 
     @Id
