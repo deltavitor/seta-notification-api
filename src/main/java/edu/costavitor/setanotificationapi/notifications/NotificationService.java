@@ -31,6 +31,7 @@ public class NotificationService {
                 .toList();
     }
 
+    // TODO properly handle exceptions
     public List<Notification> addNotificationsFromDbfFile(String filePath) {
 
         List<Notification> notifications = new ArrayList<>();
