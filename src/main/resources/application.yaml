@@ -1,3 +1,10 @@
+seta:
+    webclients:
+        geocoding-api:
+            url: "https://maps.googleapis.com/maps/api/geocode"
+            key: ${GEOCODING_API_KEY}
+        ibge:
+            url: "https://servicodados.ibge.gov.br/api"
 spring:
     application:
         name: seta-notification-api
