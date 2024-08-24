@@ -14,7 +14,7 @@ public class WebClientConfig {
 
         DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(
                 UriComponentsBuilder.fromHttpUrl("https://maps.googleapis.com/maps/api/geocode")
-                        .queryParam("key", "AIzaSyAi_WSf9KwVhq3ANHaWo-SX2zoThGJsC_U"));
+                        .queryParam("key", "key"));
 
         return WebClient.builder().uriBuilderFactory(uriBuilderFactory).build();
     }
