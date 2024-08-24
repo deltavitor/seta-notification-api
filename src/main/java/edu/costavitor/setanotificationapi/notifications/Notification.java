@@ -160,6 +160,10 @@ public class Notification {
 
     private String observacao;
 
+    // Custom / SETA fields that are not part of Sinan
+
+    private String nomeMunicipioResidencia;
+
     private Double latitude;
 
     private Double longitude;

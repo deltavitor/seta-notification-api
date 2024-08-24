@@ -157,6 +157,10 @@ public class NotificationEntity {
 
     private String dsObservacao;
 
+    // Custom / SETA fields that are not part of Sinan
+
+    private String nomeMunicipioResidencia;
+
     private Double latitude;
 
     private Double longitude;

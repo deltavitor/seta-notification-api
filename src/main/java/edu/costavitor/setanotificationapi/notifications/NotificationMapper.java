@@ -77,6 +77,7 @@ public interface NotificationMapper {
     @Mapping(target = "dataObito", source = "dtObito")
     @Mapping(target = "dataEncerramento", source = "dtEncerramento")
     @Mapping(target = "observacao", source = "dsObservacao")
+    @Mapping(target = "nomeMunicipioResidencia", source = "nomeMunicipioResidencia")
     @Mapping(target = "latitude", source = "latitude")
     @Mapping(target = "longitude", source = "longitude")
     Notification mapToNotification(NotificationEntity source);
