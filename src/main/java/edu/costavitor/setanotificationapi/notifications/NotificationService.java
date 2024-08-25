@@ -38,6 +38,15 @@ public class NotificationService {
                 .toList();
     }
 
+    public List<GeocodedNotification> findAllGeocodedNotifications() {
+
+        return notificationRepository
+                .findAllProjectedBy()
+                .stream()
+                .map(mapper::mapToGeocodedNotification)
+                .toList();
+    }
+
     // TODO properly handle exceptions
     // TODO improve efficiency (use threads, CompletableFuture)
     public List<Notification> addNotificationsFromDbfFile(String filePath) {

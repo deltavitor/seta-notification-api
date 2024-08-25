@@ -82,4 +82,9 @@ public interface NotificationMapper {
     @Mapping(target = "longitude", source = "longitude")
     Notification mapToNotification(NotificationEntity source);
 
+    @Mapping(target = "numeroNotificacao", source = "nuNotificacao")
+    @Mapping(target = "latitude", source = "latitude")
+    @Mapping(target = "longitude", source = "longitude")
+    GeocodedNotification mapToGeocodedNotification(GeocodedNotificationProjection source);
+
 }
