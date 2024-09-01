@@ -14,6 +14,7 @@ public class IbgeApiWebClientService {
     @Qualifier("ibgeApiWebClient")
     private WebClient ibgeApiWebClient;
 
+    // TODO update API calls to not use block()
     public Municipio getMunicipioByCodigoMunicipio(String codigoMunicipio) {
 
         String completeCodigoMunicipio = codigoMunicipio.length() == 6 ? appendDigitoVerificador(codigoMunicipio) : codigoMunicipio;
@@ -24,6 +25,17 @@ public class IbgeApiWebClientService {
                         .build(completeCodigoMunicipio))
                 .retrieve()
                 .bodyToMono(Municipio.class)
+                .block();
+    }
+
+    public UF getUFByCodigoUF(String codigoUF) {
+
+        return ibgeApiWebClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/v1/localidades/estados/{codigoUF}")
+                        .build(codigoUF))
+                .retrieve()
+                .bodyToMono(UF.class)
                 .block();
     }
 

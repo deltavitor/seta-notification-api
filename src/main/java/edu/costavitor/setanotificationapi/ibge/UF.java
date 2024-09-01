@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Municipio {
+public class UF {
 
     private Integer id;
 
-    private String nome;
+    private String sigla;
 }

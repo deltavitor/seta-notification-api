@@ -14,7 +14,7 @@ public class GeocodingApiWebClientService {
     @Qualifier("geocodingApiWebClient")
     private WebClient geocodingApiWebClient;
 
-    public Location getLocationByAddress(String address) {
+    public Geocode getLocationByAddress(String address) {
 
         GeocodeResponse response = geocodingApiWebClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -26,8 +26,8 @@ public class GeocodingApiWebClientService {
                 .block();
 
         // TODO improve error handling
-        if (response != null)
-            return response.getResults().getFirst().getGeometry().getLocation();
+        if (response != null && response.getResults().getFirst() != null)
+            return response.getResults().getFirst();
         return null;
     }
 }

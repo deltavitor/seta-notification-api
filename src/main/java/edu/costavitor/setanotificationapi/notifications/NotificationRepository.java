@@ -9,6 +9,4 @@ import java.util.List;
 public interface NotificationRepository extends CrudRepository<NotificationEntity, String> {
 
     List<NotificationEntity> findAll();
-
-    List<GeocodedNotificationProjection> findAllProjectedBy();
 }
