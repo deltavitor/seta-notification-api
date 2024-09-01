@@ -28,7 +28,6 @@ public class NotificationLocationService {
     /**
      * Given an address that points to a Notification, provides a matching NotificationLocation. If a NotificationLocation with
      * the same latitude/longitude already exists in the database, no NotificationLocation will be created.
-     *
      * @param address
      * @return a new NotificationLocation, in case one wasn't present, or an already existing (matched) NotificationLocation
      */
@@ -42,7 +41,19 @@ public class NotificationLocationService {
                 .map(notificationLocationMapper::mapToNotificationLocation)
                 .orElseGet(() -> {
                     NotificationLocationEntity notificationLocationEntity = notificationLocationMapper.mapToNotificationLocationEntity(geocode);
-                    return notificationLocationMapper.mapToNotificationLocation(notificationLocationRepository.save(notificationLocationEntity));
+                    return notificationLocationMapper.mapToNotificationLocation(saveNotificationLocation(notificationLocationEntity));
                 });
+    }
+
+    /**
+     * Saves a NotificationLocation to the database using a Mutex (Java's synchronized). Since this method will be executed by multiple
+     * threads in parallel, it uses a Mutex to prevent two NotificationLocations with the same latitude/longitude values from being saved
+     * at once, allowing the future Notifications to re-use the single, already existing NotificationLocation.
+     *
+     * @param notificationLocationEntity
+     * @return The saved NotificationLocationEntity
+     */
+    private synchronized NotificationLocationEntity saveNotificationLocation(NotificationLocationEntity notificationLocationEntity) {
+        return notificationLocationRepository.save(notificationLocationEntity);
     }
 }

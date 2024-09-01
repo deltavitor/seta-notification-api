@@ -1,4 +1,9 @@
 seta:
+    logging:
+        runnable: true
+    notification:
+        runnable:
+            chunk-size: 5
     webclients:
         geocoding-api:
             url: "https://maps.googleapis.com/maps/api/geocode"
