@@ -7,8 +7,10 @@ import edu.costavitor.setanotificationapi.notification_locations.NotificationLoc
 import edu.costavitor.setanotificationapi.notification_locations.NotificationLocationService;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -28,7 +30,7 @@ public class NotificationCreationRunnableService implements Runnable {
 
     private IbgeApiWebClientService ibgeApiWebClientService;
 
-    private String filePath;
+    private MultipartFile file;
 
     private Integer startingIndex;
 
@@ -39,7 +41,7 @@ public class NotificationCreationRunnableService implements Runnable {
     @Override
     public void run() {
         // TODO properly handle exceptions
-        try (FileInputStream fis = new FileInputStream(filePath); DBFReader reader = new DBFReader(fis, true)) {
+        try (InputStream inputStream = new BufferedInputStream(file.getInputStream()); DBFReader reader = new DBFReader(inputStream, true)) {
             Object[] row;
             int i = startingIndex;
             reader.skipRecords(startingIndex);

@@ -7,8 +7,10 @@ import edu.costavitor.setanotificationapi.notification_locations.NotificationLoc
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -43,12 +45,12 @@ public class NotificationService {
     }
 
     // TODO properly handle exceptions
-    public List<Notification> addNotificationsFromDbfFile(String filePath) {
+    public List<Notification> addNotificationsFromDbfFile(MultipartFile file) {
 
         List<Notification> notifications = new ArrayList<>();
 
-        try (FileInputStream fis = new FileInputStream(filePath);
-             DBFReader reader = new DBFReader(fis);
+        try (InputStream inputStream = new BufferedInputStream(file.getInputStream());
+             DBFReader reader = new DBFReader(inputStream);
              var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
             Integer numberOfRecords = DBFUtils.getNumberOfRecords(reader);
@@ -63,7 +65,7 @@ public class NotificationService {
                                             .notificationMapper(notificationMapper)
                                             .notificationLocationService(notificationLocationService)
                                             .ibgeApiWebClientService(ibgeApiWebClientService)
-                                            .filePath(filePath)
+                                            .file(file)
                                             .startingIndex(i * chunkSize)
                                             .chunkSize(chunkSize)
                                             .loggingEnabled(runnableLoggingEnabled)
