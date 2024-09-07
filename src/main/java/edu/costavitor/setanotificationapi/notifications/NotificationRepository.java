@@ -9,4 +9,6 @@ import java.util.List;
 public interface NotificationRepository extends CrudRepository<NotificationEntity, String> {
 
     List<NotificationEntity> findAll();
+
+    List<NotificationSummaryProjection> findAllByNumeroNotificationLocation(String numeroNotificationLocation);
 }

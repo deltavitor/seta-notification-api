@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.util.Date;
 
@@ -159,5 +160,6 @@ public class NotificationEntity {
 
     // Custom SETA fields that are not part of Sinan
 
+    @Indexed
     private String numeroNotificationLocation;
 }

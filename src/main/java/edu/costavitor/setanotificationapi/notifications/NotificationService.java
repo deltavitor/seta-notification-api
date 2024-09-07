@@ -44,6 +44,15 @@ public class NotificationService {
                 .toList();
     }
 
+    public List<Notification> findAllNotificationsByNumeroNotificationLocation(String numeroNotificationLocation) {
+
+        return notificationRepository
+                .findAllByNumeroNotificationLocation(numeroNotificationLocation)
+                .stream()
+                .map(notificationMapper::mapToNotification)
+                .toList();
+    }
+
     // TODO properly handle exceptions
     public List<Notification> addNotificationsFromDbfFile(MultipartFile file) {
 

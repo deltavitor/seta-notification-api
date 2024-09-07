@@ -2,7 +2,10 @@ package edu.costavitor.setanotificationapi.notification_locations;
 
 import edu.costavitor.setanotificationapi.geocoding.Geocode;
 import edu.costavitor.setanotificationapi.geocoding.GeocodingApiWebClientService;
+import edu.costavitor.setanotificationapi.notifications.Notification;
+import edu.costavitor.setanotificationapi.notifications.NotificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +20,17 @@ public class NotificationLocationService {
 
     private GeocodingApiWebClientService geocodingApiWebClientService;
 
+    // Added the Lazy to prevent circular dependency, but as a TODO: this could be improved
+    @Lazy
+    private NotificationService notificationService;
+
     public List<NotificationLocation> findAllNotificationLocations() {
 
-        return notificationLocationRepository.findAll()
+        return notificationLocationRepository
+                .findAll()
                 .stream()
                 .map(notificationLocationMapper::mapToNotificationLocation)
+                .map(this::enrichNotificationLocation)
                 .toList();
     }
 
@@ -55,5 +64,12 @@ public class NotificationLocationService {
      */
     private synchronized NotificationLocationEntity saveNotificationLocation(NotificationLocationEntity notificationLocationEntity) {
         return notificationLocationRepository.save(notificationLocationEntity);
+    }
+
+    private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation) {
+
+        List<Notification> notifications = notificationService.findAllNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
+        notificationLocation.setNotifications(notifications);
+        return notificationLocation;
     }
 }

@@ -80,4 +80,10 @@ public interface NotificationMapper {
     @Mapping(target = "numeroNotificationLocation", source = "numeroNotificationLocation")
     Notification mapToNotification(NotificationEntity source);
 
+    @Mapping(target = "numeroNotificacao", source = "nuNotificacao")
+    @Mapping(target = "dataNotificacao", source = "dtNotificacao")
+    @Mapping(target = "classificacaoFinal", source = "tpClassificacaoFinal")
+    @Mapping(target = "criterioConfirmacao", source = "tpCriterioConfirmacao")
+    Notification mapToNotification(NotificationSummaryProjection source);
+
 }
