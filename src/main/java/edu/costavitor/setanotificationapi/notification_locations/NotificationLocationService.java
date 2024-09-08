@@ -27,7 +27,7 @@ public class NotificationLocationService {
     public List<NotificationLocation> findAllNotificationLocations() {
 
         return notificationLocationRepository
-                .findAll()
+                .findAllNotificationLocations()
                 .stream()
                 .map(notificationLocationMapper::mapToNotificationLocation)
                 .map(this::enrichNotificationLocation)
@@ -46,7 +46,7 @@ public class NotificationLocationService {
         Double latitude = geocode.getGeometry().getLocation().getLat();
         Double longitude = geocode.getGeometry().getLocation().getLng();
 
-        return notificationLocationRepository.findByLatitudeAndLongitude(latitude, longitude)
+        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitude(latitude, longitude)
                 .map(notificationLocationMapper::mapToNotificationLocation)
                 .orElseGet(() -> {
                     NotificationLocationEntity notificationLocationEntity = notificationLocationMapper.mapToNotificationLocationEntity(geocode);
@@ -68,7 +68,7 @@ public class NotificationLocationService {
 
     private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation) {
 
-        List<Notification> notifications = notificationService.findAllNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
+        List<Notification> notifications = notificationService.findNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
         notificationLocation.setNotifications(notifications);
         return notificationLocation;
     }

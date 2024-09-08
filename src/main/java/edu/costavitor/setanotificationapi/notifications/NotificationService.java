@@ -39,16 +39,16 @@ public class NotificationService {
     public List<Notification> findAllNotifications() {
 
         return notificationRepository
-                .findAll()
+                .findAllNotifications()
                 .stream()
                 .map(notificationMapper::mapToNotification)
                 .toList();
     }
 
-    public List<Notification> findAllNotificationsByNumeroNotificationLocation(String numeroNotificationLocation) {
+    public List<Notification> findNotificationsByNumeroNotificationLocation(String numeroNotificationLocation) {
 
         return notificationRepository
-                .findAllByNumeroNotificationLocation(numeroNotificationLocation)
+                .findNotificationsByNumeroNotificationLocation(numeroNotificationLocation)
                 .stream()
                 .map(notificationMapper::mapToNotification)
                 .toList();
@@ -57,7 +57,7 @@ public class NotificationService {
     public Notification getNotificationByNumeroNotificacao(String numeroNotificacao) {
 
         return notificationRepository
-                .findByNuNotificacao(numeroNotificacao)
+                .getNotificationByNuNotificacao(numeroNotificacao)
                 .map(notificationMapper::mapToNotification)
                 .orElseThrow(() -> new EntityNotFoundException("Notification with numeroNotificacao " + numeroNotificacao + " not found"));
     }
