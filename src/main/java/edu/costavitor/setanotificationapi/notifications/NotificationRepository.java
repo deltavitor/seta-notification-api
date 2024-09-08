@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface NotificationRepository extends CrudRepository<NotificationEntity, String> {
 
-    List<NotificationEntity> findAllNotifications();
+    List<NotificationEntity> findAll();
 
     List<NotificationSummaryProjection> findNotificationsByNumeroNotificationLocation(String numeroNotificationLocation);
 

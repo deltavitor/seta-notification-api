@@ -39,7 +39,7 @@ public class NotificationService {
     public List<Notification> findAllNotifications() {
 
         return notificationRepository
-                .findAllNotifications()
+                .findAll()
                 .stream()
                 .map(notificationMapper::mapToNotification)
                 .toList();

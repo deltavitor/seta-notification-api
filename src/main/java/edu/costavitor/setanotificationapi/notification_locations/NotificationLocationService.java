@@ -27,7 +27,7 @@ public class NotificationLocationService {
     public List<NotificationLocation> findAllNotificationLocations() {
 
         return notificationLocationRepository
-                .findAllNotificationLocations()
+                .findAll()
                 .stream()
                 .map(notificationLocationMapper::mapToNotificationLocation)
                 .map(this::enrichNotificationLocation)
