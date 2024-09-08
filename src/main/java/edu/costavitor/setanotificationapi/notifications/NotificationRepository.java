@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NotificationRepository extends CrudRepository<NotificationEntity, String> {
@@ -11,4 +12,6 @@ public interface NotificationRepository extends CrudRepository<NotificationEntit
     List<NotificationEntity> findAll();
 
     List<NotificationSummaryProjection> findAllByNumeroNotificationLocation(String numeroNotificationLocation);
+
+    Optional<NotificationEntity> findByNuNotificacao(String nuNotificacao);
 }

@@ -2,6 +2,7 @@ package edu.costavitor.setanotificationapi.notifications;
 
 import com.linuxense.javadbf.DBFReader;
 import edu.costavitor.setanotificationapi.common.DBFUtils;
+import edu.costavitor.setanotificationapi.common.exceptions.EntityNotFoundException;
 import edu.costavitor.setanotificationapi.ibge.IbgeApiWebClientService;
 import edu.costavitor.setanotificationapi.notification_locations.NotificationLocationService;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,14 @@ public class NotificationService {
                 .stream()
                 .map(notificationMapper::mapToNotification)
                 .toList();
+    }
+
+    public Notification getNotificationByNumeroNotificacao(String numeroNotificacao) {
+
+        return notificationRepository
+                .findByNuNotificacao(numeroNotificacao)
+                .map(notificationMapper::mapToNotification)
+                .orElseThrow(() -> new EntityNotFoundException("Notification with numeroNotificacao " + numeroNotificacao + " not found"));
     }
 
     // TODO properly handle exceptions
