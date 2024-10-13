@@ -12,4 +12,10 @@ public class Geocode {
 
     @JsonProperty("formatted_address")
     private String formattedAddress;
+
+    @JsonProperty("partial_match")
+    private Boolean partialMatch;
+
+    @JsonProperty("place_id")
+    private String placeId;
 }

@@ -25,4 +25,6 @@ public class NotificationLocationEntity {
     private String locationType;
 
     private String formattedAddress;
+
+    private Boolean partialMatch;
 }

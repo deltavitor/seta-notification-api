@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -26,8 +29,15 @@ public class GeocodingApiWebClientService {
                 .block();
 
         // TODO improve error handling
-        if (response != null && response.getResults().getFirst() != null)
-            return response.getResults().getFirst();
-        return null;
+        if (response == null) return null;
+
+        List<Geocode> results = response.getResults();
+        // Return the first ROOFTOP result (ideal) or RANGE_INTERPOLATED
+        return results.stream().filter(geocode -> "ROOFTOP".equals(geocode.getGeometry().getLocationType())).findFirst()
+                .or(() -> results.stream().filter(geocode -> "RANGE_INTERPOLATED".equals(geocode.getGeometry().getLocationType())).findFirst())
+                // If none of those exist, return the geocode with the shortest placeId instead,
+                // which according to Google represents the most accurate result
+                .or(() -> results.stream().min(Comparator.comparingInt(geocode -> geocode.getPlaceId().length())))
+                .orElse(results.isEmpty() ? null : results.getFirst());
     }
 }

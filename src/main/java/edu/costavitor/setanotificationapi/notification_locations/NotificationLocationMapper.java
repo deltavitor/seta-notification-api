@@ -12,6 +12,7 @@ public interface NotificationLocationMapper {
     @Mapping(target = "longitude", source = "longitude")
     @Mapping(target = "locationType", source = "locationType")
     @Mapping(target = "formattedAddress", source = "formattedAddress")
+    @Mapping(target = "partialMatch", source = "partialMatch")
     NotificationLocation mapToNotificationLocation(NotificationLocationEntity source);
 
     @Mapping(target = "numeroNotificationLocation", ignore = true)
@@ -19,5 +20,6 @@ public interface NotificationLocationMapper {
     @Mapping(target = "longitude", source = "geometry.location.lng")
     @Mapping(target = "locationType", source = "geometry.locationType")
     @Mapping(target = "formattedAddress", source = "formattedAddress")
+    @Mapping(target = "partialMatch", source = "partialMatch")
     NotificationLocationEntity mapToNotificationLocationEntity(Geocode source);
 }

@@ -100,11 +100,11 @@ public class NotificationCreationRunnableService implements Runnable {
         String municipio = ibgeApiWebClientService.getMunicipioByCodigoMunicipio(notification.getCoMunicipioResidencia()).getNome();
         String uf = ibgeApiWebClientService.getUFByCodigoUF(notification.getCoUfNotificacao()).getSigla();
         String logradouro = notification.getNoLogradouroResidencia();
-        // Gives more context to the logradouro in case it doesn't have a prefix
-        if (!logradouro.toLowerCase().startsWith("rua") && !logradouro.toLowerCase().startsWith("avenida"))
-            logradouro = "rua " + logradouro;
+
         String bairro = notification.getNoBairroResidencia();
         String numero = notification.getNuResidencia();
-        return String.join(" ", logradouro, "número", numero, "bairro", bairro, municipio, uf);
+        // For now, we are not appending any descriptive labels to the components
+        // because the API seems to work better without them
+        return String.join(" ", logradouro, numero, bairro, municipio, uf);
     }
 }

@@ -24,6 +24,8 @@ public class NotificationLocation {
 
     private String formattedAddress;
 
+    private Boolean partialMatch;
+
     // TODO maybe create a NotificationSummary class?
     private List<Notification> notifications;
 }
