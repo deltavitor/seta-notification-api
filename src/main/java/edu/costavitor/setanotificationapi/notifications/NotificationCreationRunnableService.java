@@ -95,7 +95,7 @@ public class NotificationCreationRunnableService implements Runnable {
         return value;
     }
 
-    private String getNotificationAddress(NotificationEntity notification) {
+    private List<String> getNotificationAddress(NotificationEntity notification) {
 
         String municipio = ibgeApiWebClientService.getMunicipioByCodigoMunicipio(notification.getCoMunicipioResidencia()).getNome();
         String uf = ibgeApiWebClientService.getUFByCodigoUF(notification.getCoUfNotificacao()).getSigla();
@@ -105,6 +105,10 @@ public class NotificationCreationRunnableService implements Runnable {
         String numero = notification.getNuResidencia();
         // For now, we are not appending any descriptive labels to the components
         // because the API seems to work better without them
-        return String.join(" ", logradouro, numero, bairro, municipio, uf);
+
+        return List.of(
+                String.join(" ", "RUA", logradouro, numero, municipio, uf),
+                String.join(" ", "RUA", logradouro, numero, bairro, municipio, uf)
+        );
     }
 }

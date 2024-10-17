@@ -40,18 +40,11 @@ public class NotificationLocationService {
      * @param address
      * @return a new NotificationLocation, in case one wasn't present, or an already existing (matched) NotificationLocation
      */
-    public NotificationLocation addNotificationLocationFromAddress(String address) {
+    public NotificationLocation addNotificationLocationFromAddress(List<String> address) {
 
         Geocode geocode = geocodingApiWebClientService.getLocationByAddress(address);
-        Double latitude = geocode.getGeometry().getLocation().getLat();
-        Double longitude = geocode.getGeometry().getLocation().getLng();
 
-        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitude(latitude, longitude)
-                .map(notificationLocationMapper::mapToNotificationLocation)
-                .orElseGet(() -> {
-                    NotificationLocationEntity notificationLocationEntity = notificationLocationMapper.mapToNotificationLocationEntity(geocode);
-                    return notificationLocationMapper.mapToNotificationLocation(saveNotificationLocation(notificationLocationEntity));
-                });
+        return saveNotificationLocation(geocode);
     }
 
     /**
@@ -59,11 +52,19 @@ public class NotificationLocationService {
      * threads in parallel, it uses a Mutex to prevent two NotificationLocations with the same latitude/longitude values from being saved
      * at once, allowing the future Notifications to re-use the single, already existing NotificationLocation.
      *
-     * @param notificationLocationEntity
+     * @param geocode
      * @return The saved NotificationLocationEntity
      */
-    private synchronized NotificationLocationEntity saveNotificationLocation(NotificationLocationEntity notificationLocationEntity) {
-        return notificationLocationRepository.save(notificationLocationEntity);
+    private synchronized NotificationLocation saveNotificationLocation(Geocode geocode) {
+        Double latitude = geocode.getGeometry().getLocation().getLat();
+        Double longitude = geocode.getGeometry().getLocation().getLng();
+
+        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitude(latitude, longitude)
+                .map(notificationLocationMapper::mapToNotificationLocation)
+                .orElseGet(() -> {
+                    NotificationLocationEntity entity = notificationLocationMapper.mapToNotificationLocationEntity(geocode);
+                    return notificationLocationMapper.mapToNotificationLocation(notificationLocationRepository.save(entity));
+                });
     }
 
     private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation) {
