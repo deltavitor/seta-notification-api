@@ -8,6 +8,8 @@ public interface NotificationSummaryProjection {
 
     Date getDtNotificacao();
 
+    Date getDtDiagnosticoSintoma();
+
     String getTpClassificacaoFinal();
 
     String getTpCriterioConfirmacao();

@@ -82,6 +82,7 @@ public interface NotificationMapper {
 
     @Mapping(target = "numeroNotificacao", source = "nuNotificacao")
     @Mapping(target = "dataNotificacao", source = "dtNotificacao")
+    @Mapping(target = "dataDiagnosticoSintoma", source = "dtDiagnosticoSintoma")
     @Mapping(target = "classificacaoFinal", source = "tpClassificacaoFinal")
     @Mapping(target = "criterioConfirmacao", source = "tpCriterioConfirmacao")
     Notification mapToNotification(NotificationSummaryProjection source);
