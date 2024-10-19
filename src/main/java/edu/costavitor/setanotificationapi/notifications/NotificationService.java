@@ -45,6 +45,16 @@ public class NotificationService {
                 .toList();
     }
 
+    public List<Notification> findAllUnmappedNotifications() {
+
+        return notificationRepository
+                .findAll()
+                .stream()
+                .filter(notification -> notification.getNumeroNotificationLocation() == null)
+                .map(notificationMapper::mapToNotification)
+                .toList();
+    }
+
     public List<Notification> findNotificationsByNumeroNotificationLocation(String numeroNotificationLocation) {
 
         return notificationRepository

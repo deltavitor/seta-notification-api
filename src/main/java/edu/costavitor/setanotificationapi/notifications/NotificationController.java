@@ -20,6 +20,12 @@ public class NotificationController {
                 .body(notificationService.findAllNotifications());
     }
 
+    @GetMapping(value = "/notifications", params = {"returnUnmappedNotificationsOnly"})
+    public ResponseEntity<List<Notification>> findAllUnmappedNotifications(@RequestParam("returnUnmappedNotificationsOnly") String returnUnmappedNotificationsOnly) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(notificationService.findAllUnmappedNotifications());
+    }
+
     @GetMapping("/notifications/{numeroNotificacao}")
     public Notification getNotificationByNumeroNotificacao(@PathVariable("numeroNotificacao") String numeroNotificacao) {
         return notificationService.getNotificationByNumeroNotificacao(numeroNotificacao);
