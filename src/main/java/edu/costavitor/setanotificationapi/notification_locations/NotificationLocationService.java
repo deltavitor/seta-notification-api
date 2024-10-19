@@ -3,6 +3,7 @@ package edu.costavitor.setanotificationapi.notification_locations;
 import edu.costavitor.setanotificationapi.geocoding.Geocode;
 import edu.costavitor.setanotificationapi.geocoding.GeocodingApiWebClientService;
 import edu.costavitor.setanotificationapi.notifications.Notification;
+import edu.costavitor.setanotificationapi.notifications.NotificationAddress;
 import edu.costavitor.setanotificationapi.notifications.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -37,13 +38,14 @@ public class NotificationLocationService {
     /**
      * Given an address that points to a Notification, provides a matching NotificationLocation. If a NotificationLocation with
      * the same latitude/longitude already exists in the database, no NotificationLocation will be created.
-     * @param address
+     * @param addresses
      * @return a new NotificationLocation, in case one wasn't present, or an already existing (matched) NotificationLocation
      */
-    public NotificationLocation addNotificationLocationFromAddress(List<String> address) {
+    public NotificationLocation addNotificationLocationFromAddress(List<NotificationAddress> addresses) {
 
-        Geocode geocode = geocodingApiWebClientService.getLocationByAddress(address);
+        Geocode geocode = geocodingApiWebClientService.getLocationByAddress(addresses);
 
+        if (geocode == null) return null;
         return saveNotificationLocation(geocode);
     }
 

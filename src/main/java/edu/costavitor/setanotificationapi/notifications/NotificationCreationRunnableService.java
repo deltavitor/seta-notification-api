@@ -50,7 +50,8 @@ public class NotificationCreationRunnableService implements Runnable {
 
                 NotificationEntity notification = mapDbfRowToEntity(reader, row);
                 NotificationLocation notificationLocation = notificationLocationService.addNotificationLocationFromAddress(getNotificationAddress(notification));
-                notification.setNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
+                if (notificationLocation != null)
+                    notification.setNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
 
                 notificationRepository.save(notification);
                 notifications.add(notificationMapper.mapToNotification(notification));
@@ -95,7 +96,7 @@ public class NotificationCreationRunnableService implements Runnable {
         return value;
     }
 
-    private List<String> getNotificationAddress(NotificationEntity notification) {
+    private List<NotificationAddress> getNotificationAddress(NotificationEntity notification) {
 
         String municipio = ibgeApiWebClientService.getMunicipioByCodigoMunicipio(notification.getCoMunicipioResidencia()).getNome();
         String uf = ibgeApiWebClientService.getUFByCodigoUF(notification.getCoUfNotificacao()).getSigla();
@@ -107,8 +108,8 @@ public class NotificationCreationRunnableService implements Runnable {
         // because the API seems to work better without them
 
         return List.of(
-                String.join(" ", "RUA", logradouro, numero, municipio, uf),
-                String.join(" ", "RUA", logradouro, numero, bairro, municipio, uf)
+                NotificationAddress.builder().logradouro(logradouro).numero(numero).municipio(municipio).uf(uf).build(),
+                NotificationAddress.builder().logradouro(logradouro).numero(numero).bairro(bairro).municipio(municipio).uf(uf).build()
         );
     }
 }
