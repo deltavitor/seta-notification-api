@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -25,13 +26,13 @@ public class NotificationLocationService {
     @Lazy
     private NotificationService notificationService;
 
-    public List<NotificationLocation> findAllNotificationLocations() {
+    public List<NotificationLocation> findAllNotificationLocations(String userId) {
 
         return notificationLocationRepository
-                .findAll()
+                .findAllByUserId(userId)
                 .stream()
                 .map(notificationLocationMapper::mapToNotificationLocation)
-                .map(this::enrichNotificationLocation)
+                .map(notificationLocation -> enrichNotificationLocation(notificationLocation, userId))
                 .toList();
     }
 
@@ -41,12 +42,12 @@ public class NotificationLocationService {
      * @param addresses
      * @return a new NotificationLocation, in case one wasn't present, or an already existing (matched) NotificationLocation
      */
-    public NotificationLocation addNotificationLocationFromAddress(List<NotificationAddress> addresses) {
+    public NotificationLocation addNotificationLocationFromAddress(List<NotificationAddress> addresses, String userId) {
 
         Geocode geocode = geocodingApiWebClientService.getLocationByAddress(addresses);
 
         if (geocode == null) return null;
-        return saveNotificationLocation(geocode);
+        return saveNotificationLocation(geocode, userId);
     }
 
     /**
@@ -57,21 +58,23 @@ public class NotificationLocationService {
      * @param geocode
      * @return The saved NotificationLocationEntity
      */
-    private synchronized NotificationLocation saveNotificationLocation(Geocode geocode) {
+    private synchronized NotificationLocation saveNotificationLocation(Geocode geocode, String userId) {
         Double latitude = geocode.getGeometry().getLocation().getLat();
         Double longitude = geocode.getGeometry().getLocation().getLng();
 
-        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitude(latitude, longitude)
+        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitudeAndUserId(latitude, longitude, userId)
                 .map(notificationLocationMapper::mapToNotificationLocation)
                 .orElseGet(() -> {
                     NotificationLocationEntity entity = notificationLocationMapper.mapToNotificationLocationEntity(geocode);
+                    entity.setUserId(userId);
+                    entity.setNumeroNotificationLocation(userId + ":" + UUID.randomUUID());
                     return notificationLocationMapper.mapToNotificationLocation(notificationLocationRepository.save(entity));
                 });
     }
 
-    private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation) {
+    private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation, String userId) {
 
-        List<Notification> notifications = notificationService.findNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
+        List<Notification> notifications = notificationService.findNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation(), userId);
         notificationLocation.setNotifications(notifications);
         return notificationLocation;
     }

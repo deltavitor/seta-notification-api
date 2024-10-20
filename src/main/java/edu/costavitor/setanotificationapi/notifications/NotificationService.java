@@ -36,44 +36,44 @@ public class NotificationService {
     @Value("${seta.logging.runnable:false}")
     private Boolean runnableLoggingEnabled;
 
-    public List<Notification> findAllNotifications() {
+    public List<Notification> findAllNotifications(String userId) {
 
         return notificationRepository
-                .findAll()
+                .findAllByUserId(userId)
                 .stream()
                 .map(notificationMapper::mapToNotification)
                 .toList();
     }
 
-    public List<Notification> findAllUnmappedNotifications() {
+    public List<Notification> findAllUnmappedNotifications(String userId) {
 
         return notificationRepository
-                .findAll()
+                .findAllByUserId(userId)
                 .stream()
                 .filter(notification -> notification.getNumeroNotificationLocation() == null)
                 .map(notificationMapper::mapToNotification)
                 .toList();
     }
 
-    public List<Notification> findNotificationsByNumeroNotificationLocation(String numeroNotificationLocation) {
+    public List<Notification> findNotificationsByNumeroNotificationLocation(String numeroNotificationLocation, String userId) {
 
         return notificationRepository
-                .findNotificationsByNumeroNotificationLocation(numeroNotificationLocation)
+                .findNotificationsByNumeroNotificationLocationAndUserId(numeroNotificationLocation, userId)
                 .stream()
                 .map(notificationMapper::mapToNotification)
                 .toList();
     }
 
-    public Notification getNotificationByNumeroNotificacao(String numeroNotificacao) {
+    public Notification getNotificationByNumeroNotificacao(String numeroNotificacao, String userId) {
 
         return notificationRepository
-                .getNotificationByNuNotificacao(numeroNotificacao)
+                .getNotificationByNuNotificacaoAndUserId(numeroNotificacao, userId)
                 .map(notificationMapper::mapToNotification)
                 .orElseThrow(() -> new EntityNotFoundException("Notification with numeroNotificacao " + numeroNotificacao + " not found"));
     }
 
     // TODO properly handle exceptions
-    public List<Notification> addNotificationsFromDbfFile(MultipartFile file) {
+    public List<Notification> addNotificationsFromDbfFile(MultipartFile file, String userId) {
 
         List<Notification> notifications = new ArrayList<>();
 
@@ -97,6 +97,7 @@ public class NotificationService {
                                             .startingIndex(i * chunkSize)
                                             .chunkSize(chunkSize)
                                             .loggingEnabled(runnableLoggingEnabled)
+                                            .userId(userId)
                                             .build(),
                                     executor
                             ))

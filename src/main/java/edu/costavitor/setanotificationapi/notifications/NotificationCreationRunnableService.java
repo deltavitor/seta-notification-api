@@ -38,6 +38,8 @@ public class NotificationCreationRunnableService implements Runnable {
 
     private Boolean loggingEnabled;
 
+    private String userId;
+
     @Override
     public void run() {
         // TODO properly handle exceptions
@@ -49,7 +51,9 @@ public class NotificationCreationRunnableService implements Runnable {
             while ((row = reader.nextRecord()) != null && i < startingIndex + chunkSize) {
 
                 NotificationEntity notification = mapDbfRowToEntity(reader, row);
-                NotificationLocation notificationLocation = notificationLocationService.addNotificationLocationFromAddress(getNotificationAddress(notification));
+                notification.setUserId(userId);
+                notification.setNotificationId(userId + ":" + notification.getNuNotificacao());
+                NotificationLocation notificationLocation = notificationLocationService.addNotificationLocationFromAddress(getNotificationAddress(notification), userId);
                 if (notificationLocation != null)
                     notification.setNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
 

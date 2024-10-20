@@ -15,26 +15,26 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @GetMapping("/notifications")
-    public ResponseEntity<List<Notification>> findAllNotifications() {
+    public ResponseEntity<List<Notification>> findAllNotifications(@CookieValue(name = "setaSessionId") String userId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(notificationService.findAllNotifications());
+                .body(notificationService.findAllNotifications(userId));
     }
 
     @GetMapping(value = "/notifications", params = {"returnUnmappedNotificationsOnly"})
-    public ResponseEntity<List<Notification>> findAllUnmappedNotifications(@RequestParam("returnUnmappedNotificationsOnly") String returnUnmappedNotificationsOnly) {
+    public ResponseEntity<List<Notification>> findAllUnmappedNotifications(@RequestParam("returnUnmappedNotificationsOnly") String returnUnmappedNotificationsOnly, @CookieValue(name = "setaSessionId") String userId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(notificationService.findAllUnmappedNotifications());
+                .body(notificationService.findAllUnmappedNotifications(userId));
     }
 
     @GetMapping("/notifications/{numeroNotificacao}")
-    public Notification getNotificationByNumeroNotificacao(@PathVariable("numeroNotificacao") String numeroNotificacao) {
-        return notificationService.getNotificationByNumeroNotificacao(numeroNotificacao);
+    public Notification getNotificationByNumeroNotificacao(@PathVariable("numeroNotificacao") String numeroNotificacao, @CookieValue(name = "setaSessionId") String userId) {
+        return notificationService.getNotificationByNumeroNotificacao(numeroNotificacao, userId);
     }
 
     // TODO update to new pattern with ExceptionHandler
     @PostMapping("/notifications")
-    public ResponseEntity<List<Notification>> addNotificationsFromDbfFile(@RequestParam MultipartFile file) {
+    public ResponseEntity<List<Notification>> addNotificationsFromDbfFile(@RequestParam MultipartFile file, @CookieValue(name = "setaSessionId") String userId) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(notificationService.addNotificationsFromDbfFile(file));
+                .body(notificationService.addNotificationsFromDbfFile(file, userId));
     }
 }

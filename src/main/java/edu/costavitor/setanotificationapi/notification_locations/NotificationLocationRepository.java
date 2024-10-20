@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface NotificationLocationRepository extends CrudRepository<NotificationLocationEntity, String> {
 
-    List<NotificationLocationEntity> findAll();
+    List<NotificationLocationEntity> findAllByUserId(String userId);
 
-    Optional<NotificationLocationEntity> getNotificationLocationByLatitudeAndLongitude(Double latitude, Double longitude);
+    Optional<NotificationLocationEntity> getNotificationLocationByLatitudeAndLongitudeAndUserId(Double latitude, Double longitude, String userId);
 }

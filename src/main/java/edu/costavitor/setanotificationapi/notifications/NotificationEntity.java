@@ -18,7 +18,13 @@ import java.util.Date;
 public class NotificationEntity {
 
     @Id
+    private String notificationId;
+
+    @Indexed
     private String nuNotificacao;
+
+    @Indexed
+    private String userId;
 
     private String tpNotificacao;
 
