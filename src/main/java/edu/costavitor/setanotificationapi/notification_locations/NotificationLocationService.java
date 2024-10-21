@@ -50,6 +50,10 @@ public class NotificationLocationService {
         return saveNotificationLocation(geocode, userId);
     }
 
+    public void deleteAllNotificationLocations(String userId) {
+        notificationLocationRepository.deleteAll(notificationLocationRepository.findAllByUserId(userId));
+    }
+
     /**
      * Saves a NotificationLocation to the database using a Mutex (Java's synchronized). Since this method will be executed by multiple
      * threads in parallel, it uses a Mutex to prevent two NotificationLocations with the same latitude/longitude values from being saved

@@ -112,4 +112,9 @@ public class NotificationService {
 
         return notifications;
     }
+
+    public void deleteAllNotifications(String userId) {
+
+        notificationRepository.deleteAll(notificationRepository.findAllByUserId(userId));
+    }
 }

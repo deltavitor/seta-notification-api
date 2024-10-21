@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,5 +35,11 @@ public class NotificationLocationController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(notificationLocationService.findAllNotificationLocations(userId));
+    }
+
+    @DeleteMapping("notification-locations")
+    public ResponseEntity<Void> deleteNotificationLocations(@CookieValue(name = "setaSessionId") String userId) {
+        notificationLocationService.deleteAllNotificationLocations(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

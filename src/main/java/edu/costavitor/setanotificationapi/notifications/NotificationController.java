@@ -37,4 +37,10 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(notificationService.addNotificationsFromDbfFile(file, userId));
     }
+
+    @DeleteMapping("/notifications")
+    public ResponseEntity<Void> deleteAllNotifications(@CookieValue(name = "setaSessionId") String userId) {
+        notificationService.deleteAllNotifications(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
