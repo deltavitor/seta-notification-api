@@ -38,7 +38,7 @@ public class NotificationEntity {
 
     private String coMunicipioNotificacao;
 
-    private Integer coUnidadeNotificacao;
+    private String coUnidadeNotificacao;
 
     private Date dtDiagnosticoSintoma;
 
@@ -68,11 +68,11 @@ public class NotificationEntity {
 
     private String coDistritoResidencia;
 
-    private Integer coBairroResidencia;
+    private String coBairroResidencia;
 
     private String noBairroResidencia;
 
-    private Integer coLogradouroResidencia;
+    private String coLogradouroResidencia;
 
     private String noLogradouroResidencia;
 
