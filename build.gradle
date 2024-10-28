@@ -7,6 +7,12 @@ plugins {
 group = 'edu.costavitor'
 version = '0.0.1-SNAPSHOT'
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'edu.costavitor.setanotificationapi.SetaNotificationApiApplication'
+    }
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
