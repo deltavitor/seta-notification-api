@@ -27,7 +27,6 @@ spring:
     data:
         redis:
             url: ${REDIS_URL}
-            port: 6379
     servlet:
         multipart:
             max-file-size: 5MB
