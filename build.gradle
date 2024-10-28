@@ -13,6 +13,7 @@ application {
 }
 
 jar {
+    enabled = false
     manifest {
         attributes 'Main-Class': 'edu.costavitor.setanotificationapi.SetaNotificationApiApplication'
     }
