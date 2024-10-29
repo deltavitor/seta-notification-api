@@ -17,9 +17,6 @@ public class NotificationLocationEntity {
     private String numeroNotificationLocation;
 
     @Indexed
-    private String userId;
-
-    @Indexed
     private Double latitude;
 
     @Indexed

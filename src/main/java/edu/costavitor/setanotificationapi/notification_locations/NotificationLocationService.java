@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -26,13 +25,13 @@ public class NotificationLocationService {
     @Lazy
     private NotificationService notificationService;
 
-    public List<NotificationLocation> findAllNotificationLocations(String userId) {
+    public List<NotificationLocation> findAllNotificationLocations() {
 
         return notificationLocationRepository
-                .findAllByUserId(userId)
+                .findAll()
                 .stream()
                 .map(notificationLocationMapper::mapToNotificationLocation)
-                .map(notificationLocation -> enrichNotificationLocation(notificationLocation, userId))
+                .map(notificationLocation -> enrichNotificationLocation(notificationLocation))
                 .toList();
     }
 
@@ -42,16 +41,16 @@ public class NotificationLocationService {
      * @param addresses
      * @return a new NotificationLocation, in case one wasn't present, or an already existing (matched) NotificationLocation
      */
-    public NotificationLocation addNotificationLocationFromAddress(List<NotificationAddress> addresses, String userId) {
+    public NotificationLocation addNotificationLocationFromAddress(List<NotificationAddress> addresses) {
 
         Geocode geocode = geocodingApiWebClientService.getLocationByAddress(addresses);
 
         if (geocode == null) return null;
-        return saveNotificationLocation(geocode, userId);
+        return saveNotificationLocation(geocode);
     }
 
-    public void deleteAllNotificationLocations(String userId) {
-        notificationLocationRepository.deleteAll(notificationLocationRepository.findAllByUserId(userId));
+    public void deleteAllNotificationLocations() {
+        notificationLocationRepository.deleteAll(notificationLocationRepository.findAll());
     }
 
     /**
@@ -62,23 +61,21 @@ public class NotificationLocationService {
      * @param geocode
      * @return The saved NotificationLocationEntity
      */
-    private synchronized NotificationLocation saveNotificationLocation(Geocode geocode, String userId) {
+    private synchronized NotificationLocation saveNotificationLocation(Geocode geocode) {
         Double latitude = geocode.getGeometry().getLocation().getLat();
         Double longitude = geocode.getGeometry().getLocation().getLng();
 
-        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitudeAndUserId(latitude, longitude, userId)
+        return notificationLocationRepository.getNotificationLocationByLatitudeAndLongitude(latitude, longitude)
                 .map(notificationLocationMapper::mapToNotificationLocation)
                 .orElseGet(() -> {
                     NotificationLocationEntity entity = notificationLocationMapper.mapToNotificationLocationEntity(geocode);
-                    entity.setUserId(userId);
-                    entity.setNumeroNotificationLocation(userId + ":" + UUID.randomUUID());
                     return notificationLocationMapper.mapToNotificationLocation(notificationLocationRepository.save(entity));
                 });
     }
 
-    private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation, String userId) {
+    private NotificationLocation enrichNotificationLocation(NotificationLocation notificationLocation) {
 
-        List<Notification> notifications = notificationService.findNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation(), userId);
+        List<Notification> notifications = notificationService.findNotificationsByNumeroNotificationLocation(notificationLocation.getNumeroNotificationLocation());
         notificationLocation.setNotifications(notifications);
         return notificationLocation;
     }

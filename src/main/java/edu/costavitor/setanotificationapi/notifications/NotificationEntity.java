@@ -23,9 +23,6 @@ public class NotificationEntity {
     @Indexed
     private String nuNotificacao;
 
-    @Indexed
-    private String userId;
-
     private String tpNotificacao;
 
     private String coCid;
