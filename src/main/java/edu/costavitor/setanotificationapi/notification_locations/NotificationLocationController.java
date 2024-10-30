@@ -23,12 +23,14 @@ public class NotificationLocationController {
     @GetMapping("/notification-locations")
     public ResponseEntity<List<NotificationLocation>> findAllNotificationLocations() throws IOException {
 
-        // Temporary: use a static file to test the system with end users
+        // Temporary: use a static file to test the system with end users. If there are no notifications available,
+        // automatically "upload" from the static file
         List<NotificationLocation> notificationLocations = notificationLocationService.findAllNotificationLocations();
-        if (notificationLocations.isEmpty()) {
-            notificationService.addNotificationsFromDbfFile(DBFUtils.getStaticNotificationsDbfAsMultipart());
-        }
+        if (!notificationLocations.isEmpty())
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(notificationLocationService.findAllNotificationLocations());
 
+        notificationService.addNotificationsFromDbfFile(DBFUtils.getStaticNotificationsDbfAsMultipart());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(notificationLocationService.findAllNotificationLocations());
     }
