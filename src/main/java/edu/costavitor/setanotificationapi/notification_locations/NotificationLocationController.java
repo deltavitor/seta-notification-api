@@ -28,7 +28,7 @@ public class NotificationLocationController {
         List<NotificationLocation> notificationLocations = notificationLocationService.findAllNotificationLocations();
         if (!notificationLocations.isEmpty())
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(notificationLocationService.findAllNotificationLocations());
+                    .body(notificationLocations);
 
         notificationService.addNotificationsFromDbfFile(DBFUtils.getStaticNotificationsDbfAsMultipart());
         return ResponseEntity.status(HttpStatus.OK)
